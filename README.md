@@ -20,7 +20,3 @@ I was working on it, but it doesn't need to stay that way. It is already linked 
 
 script.js in in /static. Per FLask requirements it must stay in that folder. It is currently linked to index.html but
 I haven't yet tested if it's actually linked correctly.
-
-This is how it currently looks
-
-![alt text](https://postimg.cc/sQtG01NP/c44f7edf)
