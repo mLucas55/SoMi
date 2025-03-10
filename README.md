@@ -8,8 +8,9 @@ Once SoMi is succesfully cloned to your local device select the python inteperet
 
 Peform the following package installations in a new terminal while in the project directory:
 
-pip install Flask
-pip install werkzeug.utils
+- pip install Flask
+
+- pip install werkzeug.utils
 
 # FRONT END:
 
