@@ -1,20 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta
-      name="description"
-      content="SoMi - An interactive image gallery with drag-and-drop and resize functionality."
-    />
-    <title>SoMi - Interactive Gallery</title>
-    <link rel="stylesheet" href="styles.css" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@700&display=swap"
-      rel="stylesheet"
-    />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SoMi</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@700&display=swap" rel="stylesheet">
   </head>
   <body>
     <header class="navbar">
@@ -23,12 +16,20 @@
         <a href="/" id="navbar__logo">SoMi</a>
         <div class="navbar__right"></div>
       </div>
-      <!-- Hamburger remains in the top right of the header -->
-      <div class="hamburger" id="hamburger-menu" aria-label="Menu">
+      <div class="hamburger" id="hamburger-menu">
         <span class="bar"></span>
         <span class="bar"></span>
         <span class="bar"></span>
       </div>
+      <div class="sidebar" id="sidebar">
+        <button class="close-btn" id="close-menu">&times;</button>
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/">Saved</a></li>
+            <li><a href="/">About</a></li>
+            <li><a href="/">Sign in / Sign up</a></li>
+        </ul>
+    </div>
     </header>
 
     <main id="gallery">
@@ -39,6 +40,6 @@
 
     <input type="file" id="file-input" accept="image/*" hidden multiple />
 
-    <script src="script.js" defer></script>
+    <script src="/static/script.js" defer></script>
   </body>
 </html>
