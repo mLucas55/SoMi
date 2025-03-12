@@ -1,26 +1,44 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SoMi</title>
-    <link rel="stylesheet" href="/static/style.css">
-    <link rel="icon" href="he-logo.png">
-</head>
-<body>
-    <div>
-        
-    </div>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="SoMi - An interactive image gallery with drag-and-drop and resize functionality."
+    />
+    <title>SoMi - Interactive Gallery</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <header class="navbar">
+      <div class="navbar__container">
+        <div class="navbar__left"></div>
+        <a href="/" id="navbar__logo">SoMi</a>
+        <div class="navbar__right"></div>
+      </div>
+      <!-- Hamburger remains in the top right of the header -->
+      <div class="hamburger" id="hamburger-menu" aria-label="Menu">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+      </div>
+    </header>
 
-    <div class="form-container">
-        <h1>File Upload</h1>
-        <form method="POST" action="" enctype="multipart/form-data">
-        <div class="form-group">
-            <input type="file" name="file" class="file-input">        
-            <p><input type="submit" value="submit" class="submit-btn"></p>
-        </div>
-        </form>
-    </div>
-    <script src="{{ url_for('static', filename='script.js') }}"></script>
-</body>
+    <main id="gallery">
+      <!-- Delete box now placed inside the gallery (canvas) -->
+      <div id="delete-box">Delete</div>
+      <div id="drop-zone" tabindex="0">Drop image here</div>
+    </main>
+
+    <input type="file" id="file-input" accept="image/*" hidden multiple />
+
+    <script src="script.js" defer></script>
+  </body>
 </html>
