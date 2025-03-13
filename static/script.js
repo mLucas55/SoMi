@@ -53,7 +53,7 @@ dropZone.addEventListener("drop", (e) => {
   handleFiles(e.dataTransfer.files);
 });
 
-// Delete Box Handling (kept for manual drop events)
+// ===Delete Box Handling (kept for manual drop events)===
 deleteBox.addEventListener("dragover", (e) => {
   e.preventDefault();
   deleteBox.style.backgroundColor = "#ff0000";
@@ -89,6 +89,7 @@ function elementOverlap(rect1, rect2) {
   );
 }
 
+// === Image Handling ===
 function handleFiles(files) {
   Array.from(files).forEach((file) => {
     const reader = new FileReader();
@@ -113,6 +114,7 @@ function createImageContainer(src) {
   gallery.appendChild(container);
 }
 
+// === Image Manipulation ===
 function positionContainer(container) {
   const x = Math.random() * (gallery.clientWidth - 150);
   const y = Math.random() * (gallery.clientHeight - 150);
@@ -334,10 +336,12 @@ toggleSwitch.addEventListener("change", (event) => {
 });
 
 // hamburger menu
-document.getElementById("hamburger-menu").addEventListener("click", function() {
-  document.getElementById("sidebar").classList.add("active");
-});
+document
+  .getElementById("hamburger-menu")
+  .addEventListener("click", function () {
+    document.getElementById("sidebar").classList.add("active");
+  });
 
-document.getElementById("close-menu").addEventListener("click", function() {
+document.getElementById("close-menu").addEventListener("click", function () {
   document.getElementById("sidebar").classList.remove("active");
 });
