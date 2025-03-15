@@ -9,97 +9,159 @@ document.addEventListener("DOMContentLoaded", () => {
   // Get all draggable images
   const images = document.querySelectorAll(".draggable");
 
+  const dropZone = document.getElementById("drop-zone");
+  const fileInput = document.getElementById("file-input");
+
+  // Highlight drop zone when dragging over
+  dropZone.addEventListener("dragenter", () =>
+    dropZone.classList.add("drag-over")
+  );
+  dropZone.addEventListener("dragleave", () =>
+    dropZone.classList.remove("drag-over")
+  );
+
+  // Click to open file selector
+  dropZone.addEventListener("click", () => fileInput.click());
+
+  // Handle dropped files
+  dropZone.addEventListener("drop", (event) => {
+    dropZone.classList.remove("drag-over");
+    uploadFiles(event.dataTransfer.files);
+  });
+
+  fileInput.addEventListener("change", (event) =>
+    uploadFiles(event.target.files)
+  );
+
+  function uploadFiles(files) {
+    const formData = new FormData();
+    for (const file of files) {
+      if (file.type.startsWith("image/")) {
+        formData.append("files", file);
+      }
+    }
+
+    // Upload via AJAX
+    fetch("/upload", { method: "POST", body: formData })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.success) {
+          console.log("Upload successful:", data.files);
+          location.reload();
+        } else {
+          console.error("Upload failed:", data.error);
+        }
+      })
+      .catch((error) => console.error("Error:", error));
+  }
+
   // keeps track of current image
   let idCounter = 0;
-  images.forEach(image => {
-      let isDragging = false;
-      let isResizing = false;
-      let offsetX, offsetY;
-      let initialWidth, initialHeight, initialX, initialY;
+  images.forEach((image) => {
+    let isDragging = false;
+    let isResizing = false;
+    let offsetX, offsetY;
+    let initialWidth, initialHeight, initialX, initialY;
 
-      image.style.position = "absolute"; // Ensure the image can be moved
+    image.style.position = "absolute"; // Ensure the image can be moved
 
-      // Assigns an ID to an image, if it lacks one
-      if(!image.dataset.id){
-        image.dataset.id = "img_" + idCounter++;
-      }
+    // Assigns an ID to an image, if it lacks one
+    if (!image.dataset.id) {
+      image.dataset.id = "img_" + idCounter++;
+    }
 
-      // updates tags in real time
-      if(savedTags[image.dataset.id]){
-        updateTagDisplay(image, savedTags[image.dataset.id]);
-      }
+    // updates tags in real time
+    if (savedTags[image.dataset.id]) {
+      updateTagDisplay(image, savedTags[image.dataset.id]);
+    }
 
-      image.addEventListener("mousedown", (e) => {
-        if(e.button == 0) // Left Click, for dragging and resizing
-        {
-          e.preventDefault(); // Prevent default image dragging
+    image.addEventListener("mousedown", (e) => {
+      if (e.button == 0) {
+        // Left Click, for dragging and resizing
+        e.preventDefault(); // Prevent default image dragging
 
-          const rect = image.getBoundingClientRect();
-          const clickX = e.clientX - rect.left;
-          const clickY = e.clientY - rect.top;
+        const rect = image.getBoundingClientRect();
+        const clickX = e.clientX - rect.left;
+        const clickY = e.clientY - rect.top;
 
-          // Check if the click is in the bottom-right corner (resize zone: last 10px)
-          // NEEDS A VISUAL
-          if (clickX > rect.width - 10 && clickY > rect.height - 10) {
-              isResizing = true;
-              initialWidth = rect.width;
-              initialHeight = rect.height;
-              initialX = e.clientX;
-              initialY = e.clientY;
-              image.style.zIndex = "1000";
-              document.addEventListener("mousemove", onMouseResize);
-              document.addEventListener("mouseup", onMouseResizeEnd);
-          } else {
-              // Otherwise, start dragging
-              isDragging = true;
-              offsetX = e.clientX - rect.left;
-              offsetY = e.clientY - rect.top;
-              image.style.zIndex = "1000";
-              document.addEventListener("mousemove", onMouseMove);
-              document.addEventListener("mouseup", onMouseUp);
-          }
-        
+        // Check if the click is in the bottom-right corner (resize zone: last 10px)
+        // NEEDS A VISUAL
+        if (clickX > rect.width - 10 && clickY > rect.height - 10) {
+          isResizing = true;
+          initialWidth = rect.width;
+          initialHeight = rect.height;
+          initialX = e.clientX;
+          initialY = e.clientY;
+          image.style.zIndex = "1000";
+          document.addEventListener("mousemove", onMouseResize);
+          document.addEventListener("mouseup", onMouseResizeEnd);
+        } else {
+          // Otherwise, start dragging
+          isDragging = true;
+          offsetX = e.clientX - rect.left;
+          offsetY = e.clientY - rect.top;
+          image.style.zIndex = "1000";
+          document.addEventListener("mousemove", onMouseMove);
+          document.addEventListener("mouseup", onMouseUp);
         }
-        else if(e.button == 2) // Right click, for tag menu
-        {
-          e.preventDefault();
-          openTagForm(e, image);
-        }
-        
-      });
-
-      // Mouse movement tracking for image dragging
-      function onMouseMove(e) {
-          if (isDragging) {
-              image.style.left = (e.clientX - offsetX) + "px";
-              image.style.top = (e.clientY - offsetY) + "px";
-          }
+      } else if (e.button == 2) {
+        // Right click, for tag menu
+        e.preventDefault();
+        openTagForm(e, image);
       }
+    });
 
-      // Resets dragging state
-      function onMouseUp() {
-          isDragging = false;
-          document.removeEventListener("mousemove", onMouseMove);
-          document.removeEventListener("mouseup", onMouseUp);
+    // Mouse movement tracking for image dragging
+    function onMouseMove(e) {
+      if (isDragging) {
+        image.style.left = e.clientX - offsetX + "px";
+        image.style.top = e.clientY - offsetY + "px";
       }
+    }
 
-      // Resize image
-      function onMouseResize(e) {
-        if (isResizing) {
-            let newWidth = initialWidth + (e.clientX - initialX);
-            let newHeight = initialHeight + (e.clientY - initialY);
-            // Set minimum size limits
-            newWidth = Math.max(newWidth, 50);
-            newHeight = Math.max(newHeight, 50);
-            image.style.width = newWidth + "px";
-            image.style.height = newHeight + "px";
+    // Resets dragging state
+    function onMouseUp() {
+      isDragging = false;
+      document.removeEventListener("mousemove", onMouseMove);
+      document.removeEventListener("mouseup", onMouseUp);
+
+      // Check if the image is dropped over the delete box
+      const deleteBox = document.getElementById("delete-box");
+      if (deleteBox) {
+        const deleteRect = deleteBox.getBoundingClientRect();
+        const imageRect = image.getBoundingClientRect();
+        if (
+          imageRect.left < deleteRect.right &&
+          imageRect.right > deleteRect.left &&
+          imageRect.top < deleteRect.bottom &&
+          imageRect.bottom > deleteRect.top
+        ) {
+          image.remove();
+          // Remove saved tags from localStorage
+          delete savedTags[image.dataset.id];
+          localStorage.setItem("imageTags", JSON.stringify(savedTags));
+          // NEEDS A CALL TO THE BACKEND TO DELETE THE IMAGE
         }
+      }
+    }
+
+    // Resize image
+    function onMouseResize(e) {
+      if (isResizing) {
+        let newWidth = initialWidth + (e.clientX - initialX);
+        let newHeight = initialHeight + (e.clientY - initialY);
+        // Set minimum size limits
+        newWidth = Math.max(newWidth, 50);
+        newHeight = Math.max(newHeight, 50);
+        image.style.width = newWidth + "px";
+        image.style.height = newHeight + "px";
+      }
     }
 
     function onMouseResizeEnd() {
-        isResizing = false;
-        document.removeEventListener("mousemove", onMouseResize);
-        document.removeEventListener("mouseup", onMouseResizeEnd);
+      isResizing = false;
+      document.removeEventListener("mousemove", onMouseResize);
+      document.removeEventListener("mouseup", onMouseResizeEnd);
     }
   });
 
@@ -174,7 +236,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 // Prevents right click context menu on the HTML page
-document.addEventListener("contextmenu", function(e) {
+document.addEventListener("contextmenu", function (e) {
   e.preventDefault();
 });
 

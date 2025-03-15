@@ -13,7 +13,7 @@ def index():
     files = os.listdir(app.config['UPLOAD_PATH'])
     return render_template('index.html', files=files)
 
-@app.route('/', methods=['POST'])
+@app.route('/upload', methods=['POST'])
 def upload_files():
     uploaded_file = request.files['file']
     filename = secure_filename(uploaded_file.filename)
