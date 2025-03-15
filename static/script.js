@@ -1,6 +1,16 @@
 document.addEventListener("DOMContentLoaded", () => {
+  // Retrieve saved tags from localStorage or create an empty object
+  const savedTags = JSON.parse(localStorage.getItem("imageTags")) || {};
+  let currentImageId = null;
+
+  // Create the tag form (floating overlay)
+  const tagForm = createTagForm();
+
+  // Get all draggable images
   const images = document.querySelectorAll(".draggable");
 
+  // keeps track of current image
+  let idCounter = 0;
   images.forEach(image => {
       let isDragging = false;
       let isResizing = false;
@@ -8,6 +18,16 @@ document.addEventListener("DOMContentLoaded", () => {
       let initialWidth, initialHeight, initialX, initialY;
 
       image.style.position = "absolute"; // Ensure the image can be moved
+
+      // Assigns an ID to an image, if it lacks one
+      if(!image.dataset.id){
+        image.dataset.id = "img_" + idCounter++;
+      }
+
+      // updates tags in real time
+      if(savedTags[image.dataset.id]){
+        updateTagDisplay(image, savedTags[image.dataset.id]);
+      }
 
       image.addEventListener("mousedown", (e) => {
         if(e.button == 0) // Left Click, for dragging and resizing
@@ -40,9 +60,10 @@ document.addEventListener("DOMContentLoaded", () => {
           }
         
         }
-        else if(e.button == 1) // Right click, for tag menu
+        else if(e.button == 2) // Right click, for tag menu
         {
-          // TBD
+          e.preventDefault();
+          openTagForm(e, image);
         }
         
       });
@@ -81,6 +102,80 @@ document.addEventListener("DOMContentLoaded", () => {
         document.removeEventListener("mouseup", onMouseResizeEnd);
     }
   });
+
+  // ----- Tag Form Creation and Handling -----
+
+  // Create the floating tag form
+  function createTagForm() {
+    const formBox = document.createElement("div");
+    formBox.classList.add("image-form");
+    formBox.innerHTML = `
+      <button class="close-button">X</button>
+      <label>Price: <input type="text" class="price-input" placeholder="Price"></label>
+      <br>
+      <label>Name: <input type="text" class="name-input" placeholder="Name"></label>
+      <br>
+      <label>Link: <input type="text" class="link-input" placeholder="Link"></label>
+      <br>
+      <button class="save-tags-btn">Save Tags</button>
+    `;
+
+    // Close the form when clicking the close button
+    formBox.querySelector(".close-button").addEventListener("click", () => {
+      formBox.style.display = "none";
+    });
+
+    // Save tag data and update localStorage
+    formBox.querySelector(".save-tags-btn").addEventListener("click", () => {
+      if (currentImageId) {
+        const price = formBox.querySelector(".price-input").value;
+        const name = formBox.querySelector(".name-input").value;
+        const link = formBox.querySelector(".link-input").value;
+        // Save tags for the current image
+        savedTags[currentImageId] = { price, name, link };
+        localStorage.setItem("imageTags", JSON.stringify(savedTags));
+        // Update the tag display for the image
+        const img = document.querySelector(`[data-id="${currentImageId}"]`);
+        if (img) {
+          updateTagDisplay(img, savedTags[currentImageId]);
+        }
+        formBox.style.display = "none";
+      }
+    });
+
+    document.body.appendChild(formBox);
+    return formBox;
+  }
+
+  // Open and populate the tag form for a given image
+  function openTagForm(e, image) {
+    currentImageId = image.dataset.id;
+    const existingTags = savedTags[currentImageId] || {};
+    tagForm.querySelector(".price-input").value = existingTags.price || "";
+    tagForm.querySelector(".name-input").value = existingTags.name || "";
+    tagForm.querySelector(".link-input").value = existingTags.link || "";
+    // Position the form near the mouse click
+    tagForm.style.left = e.pageX + "px";
+    tagForm.style.top = e.pageY + "px";
+    tagForm.style.display = "block";
+  }
+
+  // Update (or create) a tag display element for an image
+  function updateTagDisplay(image, tags) {
+    // Assume the image is inside a container; if not, you might need to wrap it
+    let container = image.parentElement;
+    let tagDisplay = container.querySelector(".tag-display");
+    if (!tagDisplay) {
+      tagDisplay = document.createElement("div");
+      tagDisplay.classList.add("tag-display");
+      container.appendChild(tagDisplay);
+    }
+  }
+});
+
+// Prevents right click context menu on the HTML page
+document.addEventListener("contextmenu", function(e) {
+  e.preventDefault();
 });
 
 // hamburger menu
