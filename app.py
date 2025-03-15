@@ -4,7 +4,7 @@ from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 
-app.config['MAX_CONTENT_LENGTH'] = 1024 * 1024
+app.config['MAX_CONTENT_LENGTH'] = 8000000 # 8 MB file limit
 app.config['UPLOAD_EXTENSIONS'] = ['.jpg', '.png', '.webp', '.avif']
 app.config['UPLOAD_PATH'] = 'uploads'
 
