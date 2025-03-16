@@ -1,28 +1,60 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>SoMi</title>
-    <link rel="stylesheet" href="/static/style.css">
-    <link rel="icon" href="he-logo.png">
-</head>
-<body>
-    <div class="form-container">
-        <h1>File Upload</h1>
-        <form method="POST" action="" enctype="multipart/form-data">
-        <div class="form-group">
-            <input type="file" name="file" class="file-input">        
-            <p><input type="submit" value="submit" class="submit-btn"></p>
-        </div>
-        </form>
+    <link rel="stylesheet" href="/static/style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="icon" href="he-logo.png" />
+  </head>
+  <body>
+    <header class="navbar">
+      <div class="navbar__container">
+        <a href="/" id="navbar__logo">SoMi</a>
+      </div>
+      <div class="hamburger" id="hamburger-menu">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+      </div>
+      <div class="sidebar" id="sidebar">
+        <button class="close-btn" id="close-menu">&times;</button>
+        <ul>
+          <li><a href="/">Home</a></li>
+          <li><a href="/">Saved</a></li>
+          <li><a href="/">About</a></li>
+          <li><a href="/">Sign in / Sign up</a></li>
+        </ul>
+      </div>
+    </header>
 
-        <div class="container">
-            {% for file in files %}
-                <img class="draggable" src="{{ url_for('uploaded_file', filename=file) }}" alt="{{ file }}" width="200">
-            {% endfor %}
-        </div>
+    <div class="form-container">
+      <div id="drop-zone">
+        Drag Image or Click to Upload
+        <span id="file-upload-btn"></span>
+        <input type="file" id="file-input" accept="image/*" multiple hidden />
+      </div>
+
+      <div class="container">
+        {% for file in files %}
+        <img
+          class="draggable"
+          src="{{ url_for('uploaded_file', filename=file) }}"
+          alt="{{ file }}"
+          width="200"
+        />
+        {% endfor %}
+      </div>
     </div>
+
+    <div id="delete-box">Delete</div>
+
     <script src="{{ url_for('static', filename='script.js') }}"></script>
-</body>
+  </body>
 </html>
