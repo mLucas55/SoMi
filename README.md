@@ -20,3 +20,8 @@ I was working on it, but it doesn't need to stay that way. It is already linked 
 
 script.js in in /static. Per FLask requirements it must stay in that folder. It is currently linked to index.html but
 I haven't yet tested if it's actually linked correctly.
+
+
+# API Key Background Remova
+
+sandbox_d7545eb6450225858b6b018ec5d93a756e580ee1
