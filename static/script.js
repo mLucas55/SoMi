@@ -1,4 +1,47 @@
 document.addEventListener("DOMContentLoaded", () => {
+  //image uploading
+  // --- Drag & Drop Upload Handling ---
+  const dropZone = document.getElementById("drop-zone");
+  const fileInput = document.getElementById("file-input");
+
+  // Click handler for drop zone
+  dropZone.addEventListener("click", () => fileInput.click());
+
+  // File input change handler
+  fileInput.addEventListener("change", function (e) {
+    handleFiles(e.target.files);
+  });
+
+  // Drag & drop handlers
+  dropZone.addEventListener("dragover", (e) => {
+    e.preventDefault();
+    dropZone.style.backgroundColor = "#e0e0e0";
+  });
+
+  dropZone.addEventListener("dragleave", () => {
+    dropZone.style.backgroundColor = "#f9f9f9";
+  });
+
+  dropZone.addEventListener("drop", (e) => {
+    e.preventDefault();
+    dropZone.style.backgroundColor = "#f9f9f9";
+    handleFiles(e.dataTransfer.files);
+  });
+
+  function handleFiles(files) {
+    const formData = new FormData();
+    for (const file of files) {
+      formData.append("file", file);
+    }
+
+    fetch("/upload", {
+      method: "POST",
+      body: formData,
+    })
+      .then((response) => response.ok && window.location.reload())
+      .catch((error) => console.error("Upload failed:", error));
+  }
+
   // Retrieve saved tags from localStorage or create an empty object
   const savedTags = JSON.parse(localStorage.getItem("imageTags")) || {};
   let currentImageId = null;
@@ -8,52 +51,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Get all draggable images
   const images = document.querySelectorAll(".draggable");
-
-  const dropZone = document.getElementById("drop-zone");
-  const fileInput = document.getElementById("file-input");
-
-  // Highlight drop zone when dragging over
-  dropZone.addEventListener("dragenter", () =>
-    dropZone.classList.add("drag-over")
-  );
-  dropZone.addEventListener("dragleave", () =>
-    dropZone.classList.remove("drag-over")
-  );
-
-  // Click to open file selector
-  dropZone.addEventListener("click", () => fileInput.click());
-
-  // Handle dropped files
-  dropZone.addEventListener("drop", (event) => {
-    dropZone.classList.remove("drag-over");
-    uploadFiles(event.dataTransfer.files);
-  });
-
-  fileInput.addEventListener("change", (event) =>
-    uploadFiles(event.target.files)
-  );
-
-  function uploadFiles(files) {
-    const formData = new FormData();
-    for (const file of files) {
-      if (file.type.startsWith("image/")) {
-        formData.append("files", file);
-      }
-    }
-
-    // Upload via AJAX
-    fetch("/upload", { method: "POST", body: formData })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.success) {
-          console.log("Upload successful:", data.files);
-          location.reload();
-        } else {
-          console.error("Upload failed:", data.error);
-        }
-      })
-      .catch((error) => console.error("Error:", error));
-  }
 
   // keeps track of current image
   let idCounter = 0;
