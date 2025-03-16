@@ -9,7 +9,6 @@
 /* ORIGINAL LUCAS CODE START*/
 body {
   font-family: Arial, sans-serif;
-  background-color: #f4f4f4;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -17,12 +16,13 @@ body {
 }
 
 .form-container {
-  background: hsl(193, 41%, 85%);
+  background: #f4f4f4;
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-  width: 300px;
-  user-select: none;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
 }
 
 .form-group {
@@ -58,6 +58,7 @@ input::file-selector-button {
   position: fixed;
   top: 0;
   display: flex;
+  z-index: 1;
 }
 
 .navbar__container {
@@ -206,7 +207,7 @@ input::file-selector-button {
   background: #fff;
   border: 1px solid #ccc;
   padding: 10px;
-  z-index: 2000;
+  z-index: 2;
 }
 
 /* Style the close button */

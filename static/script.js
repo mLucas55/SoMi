@@ -60,12 +60,23 @@ document.addEventListener("DOMContentLoaded", () => {
     let offsetX, offsetY;
     let initialWidth, initialHeight, initialX, initialY;
 
-    image.style.position = "absolute"; // Ensure the image can be moved
-
     // Assigns an ID to an image, if it lacks one
     if (!image.dataset.id) {
       image.dataset.id = "img_" + idCounter++;
     }
+
+    // If an image has a saved position it is returned to it
+    // The ? is a null check
+    if (savedTags[image.dataset.id]?.position) {
+      image.style.left = savedTags[image.dataset.id].position.left;
+      image.style.top = savedTags[image.dataset.id].position.top;
+    } else {
+      // otherwise given a random position on the gallery
+      image.style.left = Math.random() * (window.innerWidth - 40) + 20 + "px";
+      image.style.top = Math.random() * (window.innerHeight - 40) + 20 + "px";
+    }
+
+    image.style.position = "absolute"; // Ensure the image can be moved
 
     // updates tags in real time
     if (savedTags[image.dataset.id]) {
@@ -122,6 +133,14 @@ document.addEventListener("DOMContentLoaded", () => {
       document.removeEventListener("mousemove", onMouseMove);
       document.removeEventListener("mouseup", onMouseUp);
 
+      // Save position to localStorage
+      savedTags[image.dataset.id] = savedTags[image.dataset.id] || {};
+      savedTags[image.dataset.id].position = {
+        left: image.style.left,
+        top: image.style.top,
+      };
+      localStorage.setItem("imageTags", JSON.stringify(savedTags));
+
       // Check if the image is dropped over the delete box
       const deleteBox = document.getElementById("delete-box");
       if (deleteBox) {
@@ -139,6 +158,7 @@ document.addEventListener("DOMContentLoaded", () => {
           localStorage.setItem("imageTags", JSON.stringify(savedTags));
           // NEEDS A CALL TO THE BACKEND TO DELETE THE IMAGE
         }
+        localStorage.setItem("imageTags", JSON.stringify(savedTags));
       }
     }
 
