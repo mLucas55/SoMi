@@ -1,12 +1,47 @@
 import os
-from flask import Flask, render_template, request, redirect, url_for, abort, send_from_directory, flash, 
+from flask import Flask, render_template, request, redirect, url_for, abort, send_from_directory, flash
 from werkzeug.utils import secure_filename
+from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
+
+# initialize flask app
 app = Flask(__name__)
 
+# image upload configurations
 app.config['MAX_CONTENT_LENGTH'] = 8000000 # 8 MB file limit
 app.config['UPLOAD_EXTENSIONS'] = ['.jpg', '.png', '.webp', '.avif']
 app.config['UPLOAD_PATH'] = 'uploads'
+
+# connect to postgresql
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://somiadmin:sweng2025@localhost/somidb'
+# create key for hash
+app.config['SECRET_KEY'] = '123'
+# initialize SQLAlchemy
+db = SQLAlchemy(app)
+# initialize bcrypt
+bcrypt = Bcrypt(app)
+
+#######################################################################################################
+
+###########################
+###   BEGIN POSTGRESQL  ###
+###########################
+
+# User
+class User(db.Model):
+    
+    __tablename__='Users'
+
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(128), unique=True, nullable=False)
+    password = db.Column(db.String(128), nullable=False)
+
+    def __repr__(self):
+        return f'<User {self.username}>'
+
+##########################
+###   END POSTGRESQL   ###
+##########################
 
 #####################################################################
 #                           landing page                            #
