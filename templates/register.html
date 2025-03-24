@@ -2,7 +2,7 @@
 
 <head>
 	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Account Registration - SoMi</title>
 </head>
 
@@ -19,7 +19,7 @@
 		{% endif %}
 	{% endwith %}
 
-	<form method="POST" action={{ url_for('register) }}">
+	<form method="POST" action="{{ url_for('register') }}">
 		<label for="username">Username</label>
 		<input type="text" id="username" name="username" required>
 		<br>
