@@ -90,20 +90,37 @@ def register():
 #                              login                                #
 #####################################################################
 
-@app.route('/login')
+@app.route('/login', methods=['GET', 'POST'])
 def login():
 
     if request.method == 'POST':
-    
-        return render_template('home.html')
+        
+        username = request.form['username']
+        password = request.form['password']
 
+        # authentication fail
+        if not authenticate(username, password):
+
+            # flash('Error: incorrect username or password. Please try again.')
+            return redirect(url_for('login'))
+
+        # user logs in, and directed to their homepage
+        return redirect(url_for('home'))
+
+    # if GET, load login page
     return render_template('login.html')
+
+# validates user submitted password against the hash in the database
+def authenticate(username, login_password):
+
+    database_hashed_password = User.query.filter_by(username=username).first().password
+    return bcrypt.check_password_hash(database_hashed_password, login_password)
 
 #####################################################################
 #                          user homepage                            #
 #####################################################################
 
-app.route('/home')
+@app.route('/home')
 def home():
 
     return render_template('home.html')
@@ -135,7 +152,6 @@ def upload_files():
 def uploaded_file(filename):
 
     return send_from_directory(app.config['UPLOAD_PATH'], filename)
-
 
 #####################################################################
 
