@@ -101,7 +101,7 @@ def login():
         # authentication fail
         if not authenticate(username, password):
 
-            # flash('Error: incorrect username or password. Please try again.')
+            flash('Error: incorrect username or password. Please try again.')
             return redirect(url_for('login'))
 
         # user logs in, and directed to their homepage
@@ -120,7 +120,7 @@ def authenticate(username, login_password):
 #                          user homepage                            #
 #####################################################################
 
-@app.route('/home')
+@app.route('/home', methods=['GET'])
 def home():
 
     return render_template('home.html')
