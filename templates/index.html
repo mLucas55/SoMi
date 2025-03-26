@@ -26,10 +26,10 @@
       <div class="sidebar" id="sidebar">
         <button class="close-btn" id="close-menu">&times;</button>
         <ul>
-          <li><a href="/">Home</a></li>
+		<li><a href="{{ url_for('home') }}">Home</a></li>
           <li><a href="/">Saved</a></li>
           <li><a href="/">About</a></li>
-          <li><a href="/">Sign in / Sign up</a></li>
+	  <li><a href="{{ url_for('register') }}">Sign in / Sign up</a></li>
         </ul>
       </div>
     </header>
