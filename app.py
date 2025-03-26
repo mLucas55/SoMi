@@ -10,7 +10,7 @@ app = Flask(__name__)
 # image upload configurations
 app.config['MAX_CONTENT_LENGTH'] = 8000000 # 8 MB file limit
 app.config['UPLOAD_EXTENSIONS'] = ['.jpg', '.png', '.webp', '.avif']
-app.config['UPLOAD_PATH'] = 'uploads'
+app.config['UPLOAD_PATH'] = '/var/www/somi/uploads'
 
 # connect to postgresql
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://somiadmin:sweng2025@localhost/somidb'
