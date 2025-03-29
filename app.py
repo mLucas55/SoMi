@@ -66,21 +66,26 @@ def authenticate(username, login_password):
 ###########################
 
 #####################################################################
-#                           landing page                            #
+#                        user homepage/canvas                       #
 #####################################################################
 
-@app.route('/')
+@app.route('/home')
 @login_required
-def index():
+def home():
     
     # user id of user currently logged in
     user_id = current_user.id
     # /uploads/<user_id>
     user_directory = os.path.join(app.config['UPLOAD_PATH'], str(user_id))
+
+
+    if not os.path.exists(user_directory):
+        return render_template('home.html', files="")
+
     # get all files in user directory 
     files = os.listdir(user_directory)
     #render canvas and all files
-    return render_template('index.html', files=files)
+    return render_template('home.html', files=files)
 
 #####################################################################
 #                        account registration                       #
@@ -158,12 +163,12 @@ def logout():
     return redirect(url_for('login'))
 
 #####################################################################
-#                          user homepage                            #
+#                              index                                #
 #####################################################################
 
-@app.route('/home', methods=['GET'])
-def home():
-    return render_template('home.html')
+@app.route('/', methods=['GET'])
+def index():
+    return render_template('index.html')
 
 #####################################################################
 #                          image uploads                            #
