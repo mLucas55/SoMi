@@ -43,6 +43,16 @@ class User(UserMixin, db.Model):
     def __repr__(self):
         return f'<User {self.username}>'
 
+# Outfit
+class Outfit(db.Model):
+
+    __tablename__='Outfits'
+
+    id = db.Column(db.String(128), primary_key=True)
+    name = db.Column(db.String(128), unique=True)
+    created_by = db.Column(db.Integer, unique=False)
+    data = db.Column(db.LargeBinary, nullable=False)
+
 ##########################
 ###   END POSTGRESQL   ###
 ##########################
@@ -66,6 +76,14 @@ def authenticate(username, login_password):
 ###########################
 
 #####################################################################
+#                              index                                #
+#####################################################################
+
+@app.route('/', methods=['GET'])
+def index():
+    return render_template('index.html')
+
+#####################################################################
 #                        user homepage/canvas                       #
 #####################################################################
 
@@ -86,6 +104,15 @@ def home():
     files = os.listdir(user_directory)
     #render canvas and all files
     return render_template('home.html', files=files)
+
+#####################################################################
+#                            saved outfits                          #
+#####################################################################
+
+@app.route('/saved')
+@login_required
+def saved():
+    return render_template('saved.html')
 
 #####################################################################
 #                        account registration                       #
@@ -163,14 +190,6 @@ def logout():
     return redirect(url_for('login'))
 
 #####################################################################
-#                              index                                #
-#####################################################################
-
-@app.route('/', methods=['GET'])
-def index():
-    return render_template('index.html')
-
-#####################################################################
 #                          image uploads                            #
 #####################################################################
 
@@ -191,7 +210,6 @@ def upload_files():
         # validate file extension
         file_ext = os.path.splitext(filename)[1]
         if file_ext not in app.config['UPLOAD_EXTENSIONS']:
-            flash('Error: file extension not allowed.')
             abort(400)
     
         # uploads/<user_id>/
@@ -204,7 +222,7 @@ def upload_files():
         filepath = os.path.join(usr_upload_directory, filename)
         # upload file to user directory
         uploaded_file.save(filepath)
-        flash('File uploaded successfully.');
+        flash('File uploaded successfully.')
 
     return redirect(url_for('index'))
 
@@ -215,6 +233,11 @@ def uploaded_file(user_id, filename):
 
     # get user directory
     usr_directory = os.path.join(app.config['UPLOAD_PATH'], str(user_id))
+
+    # prevent unauthorized access to other user's images
+    if str(current_user.id) != user_id:
+        abort(400)
+
     # serve the image
     return send_from_directory(usr_directory, filename)
 
