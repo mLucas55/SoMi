@@ -23,3 +23,11 @@ def upload_files():
             abort(400)
         uploaded_file.save(os.path.join(app.config['UPLOAD_PATH'], filename))
     return redirect(url_for('index'))
+
+@app.route("/Saved")
+def Saved():
+    return render_template('Saved.html')
+
+@app.route("/About")
+def About():
+    return render_template('About.html')
