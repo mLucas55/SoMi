@@ -25,3 +25,7 @@ I haven't yet tested if it's actually linked correctly.
 # API Key Background Remova
 
 sandbox_d7545eb6450225858b6b018ec5d93a756e580ee1
+
+run in terminal /Applications/Python\ 3.13/Install\ Certificates.command
+
+pip install pillow pillow-avif-plugin
