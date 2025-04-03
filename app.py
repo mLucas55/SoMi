@@ -1,8 +1,13 @@
 import os
-from flask import Flask, render_template, request, redirect, url_for, abort, send_from_directory
+from flask import Flask, Flask, render_template, request, redirect, url_for, abort, send_from_directory
 from werkzeug.utils import secure_filename
-from remove_background import remove_background
+
+# image conversion
 from PIL import Image
+import pillow_avif 
+
+from remove_background import remove_background
+from remove_image import remove_image
 
 app = Flask(__name__)
 
@@ -11,16 +16,19 @@ app.config['UPLOAD_EXTENSIONS'] = ['.jpg', '.png', '.webp', '.avif']
 app.config['UPLOAD_PATH'] = 'uploads'
 
 def convert_to_jpg(input_path):
-    try:
-        img = Image.open(input_path)
-        rgb_img = img.convert('RGB')
-        new_path = os.path.splitext(input_path)[0] + ".jpg"
-        rgb_img.save(new_path, format='JPEG')
-        os.remove(input_path)  # Remove the original file
-        return new_path
-    except Exception as e:
-        print(f"Error converting image: {e}")
-        return input_path  # Return original path if conversion fails
+     # Open the AVIF image
+    with Image.open(input_path) as img:
+        # Define the output path, changing the extension to .jpg
+        output_path = os.path.splitext(input_path)[0] + '.jpg'
+        
+        # Convert and save the image as JPG
+        img.convert('RGB').save(output_path, 'JPEG')
+        print(f"Converted {input_path} to {output_path}")
+
+        remove_image(input_path, output_path)
+    
+    # Return the path of the converted image
+    return output_path
 
 @app.route('/')
 def index():
@@ -32,27 +40,28 @@ def upload_files():
     uploaded_file = request.files['file']
     filename = secure_filename(uploaded_file.filename)
     if filename != '':
-        file_ext = os.path.splitext(filename)[1].lower()
+        file_ext = os.path.splitext(filename)[1]
         if file_ext not in app.config['UPLOAD_EXTENSIONS']:
             abort(400)
-        
-        file_path = os.path.join(app.config['UPLOAD_PATH'], filename)
-        uploaded_file.save(file_path)
-        
-        # Convert AVIF and WEBP to JPG before processing
-        if file_ext in ['.webp', '.avif']:
-            file_path = convert_to_jpg(file_path)
-        
-        # Process the image
-        output_path = os.path.join(app.config['UPLOAD_PATH'], "processed-" + os.path.basename(file_path))
-        remove_background(file_path, output_path)
-        
-        # Remove the preprocessed image
-        if os.path.exists(output_path):
-            os.remove(file_path)
-            print(f"Deleted: {file_path}")
+        uploaded_file.save(os.path.join(app.config['UPLOAD_PATH'], filename))
+
+        # ------------- Convert AVIF and WEBP to JPG before processing -------------
+        if file_ext == ".avif" or file_ext == ".webp":
+            conversion_path = os.path.join(app.config['UPLOAD_PATH'], filename)
+            input_path = convert_to_jpg(conversion_path)
+            output_path = os.path.join(app.config['UPLOAD_PATH'], "processed-" + filename)
+
+            remove_background(input_path, output_path)
+
         else:
-            print("File not found!")
+            # ------------- Call the remove_background function -------------
+            input_path = os.path.join(app.config['UPLOAD_PATH'], filename)
+            output_path = os.path.join(app.config['UPLOAD_PATH'], "processed-" + filename)
+
+            remove_background(input_path, output_path)
+        
+        # ------------- Remmove pre-processed image -------------
+        remove_image(input_path, output_path)
 
     return redirect(url_for('index'))
 
