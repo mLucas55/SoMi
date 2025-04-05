@@ -5,6 +5,13 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from flask_login import login_user, LoginManager, UserMixin, login_required, current_user, logout_user
 
+# Image conversion dependencies and plugins
+from PIL import Image
+import pillow_avif 
+
+from remove_background import remove_background
+from remove_image import remove_image
+
 # initialize flask app
 app = Flask(__name__)
 
@@ -56,6 +63,21 @@ class Outfit(db.Model):
 ##########################
 ###   END POSTGRESQL   ###
 ##########################
+
+def convert_to_jpg(input_path):
+     # Open the AVIF image
+    with Image.open(input_path) as img:
+        # Define the output path, changing the extension to .jpg
+        output_path = os.path.splitext(input_path)[0] + '.jpg'
+        
+        # Convert and save the image as JPG
+        img.convert('RGB').save(output_path, 'JPEG')
+        print(f"Converted {input_path} to {output_path}")
+
+        remove_image(input_path, output_path)
+    
+    # Return the path of the converted image
+    return output_path
 
 #######################################################################################################
 
@@ -223,6 +245,24 @@ def upload_files():
         # upload file to user directory
         uploaded_file.save(filepath)
         flash('File uploaded successfully.')
+
+        # ------------- Convert AVIF and WEBP to JPG before processing -------------
+        if file_ext == ".avif" or file_ext == ".webp":
+            conversion_path = os.path.join(app.config['UPLOAD_PATH'], filename)
+            input_path = convert_to_jpg(conversion_path)
+            output_path = os.path.join(app.config['UPLOAD_PATH'], "processed-" + filename)
+
+            remove_background(input_path, output_path)
+
+        else:
+            # ------------- Call the remove_background function -------------
+            input_path = os.path.join(app.config['UPLOAD_PATH'], filename)
+            output_path = os.path.join(app.config['UPLOAD_PATH'], "processed-" + filename)
+
+            remove_background(input_path, output_path)
+        
+        # ------------- Remmove pre-processed image -------------
+        remove_image(input_path, output_path)
 
     return redirect(url_for('index'))
 
