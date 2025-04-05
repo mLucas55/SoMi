@@ -28,3 +28,11 @@ def upload_files():
 @app.route('/uploads/<filename>')
 def uploaded_file(filename):
     return send_from_directory(app.config['UPLOAD_PATH'], filename)
+
+@app.route("/Saved")
+def Saved():
+    return render_template('Saved.html')
+
+@app.route("/About")
+def About():
+    return render_template('About.html')
