@@ -6,7 +6,6 @@
   font-family: "Kumbh Sans", sans-serif;
 }
 
-/* ORIGINAL LUCAS CODE START*/
 body {
   font-family: Arial, sans-serif;
   display: flex;
@@ -46,9 +45,6 @@ input::file-selector-button {
   cursor: pointer;
   transition: 0.3s;
 }
-/* ORIGINAL LUCAS CODE END */
-
-/* NAVBAR UI */
 
 /* Navbar Styles */
 .navbar {
