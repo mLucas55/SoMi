@@ -248,12 +248,3 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // Prevent context menu
 document.addEventListener("contextmenu", (e) => e.preventDefault());
-
-// Hamburger menu
-document.getElementById("hamburger-menu").addEventListener("click", () => {
-  document.getElementById("sidebar").classList.add("active");
-});
-
-document.getElementById("close-menu").addEventListener("click", () => {
-  document.getElementById("sidebar").classList.remove("active");
-});
