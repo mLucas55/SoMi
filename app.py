@@ -248,16 +248,16 @@ def upload_files():
 
         # ------------- Convert AVIF and WEBP to JPG before processing -------------
         if file_ext == ".avif" or file_ext == ".webp":
-            conversion_path = os.path.join(app.config['UPLOAD_PATH'], filename)
+            conversion_path = os.path.join(usr_upload_directory, filename)
             input_path = convert_to_jpg(conversion_path)
-            output_path = os.path.join(app.config['UPLOAD_PATH'], "processed-" + filename)
+            output_path = os.path.join(usr_upload_directory, "processed-" + filename)
 
             remove_background(input_path, output_path)
 
         else:
             # ------------- Call the remove_background function -------------
-            input_path = os.path.join(app.config['UPLOAD_PATH'], filename)
-            output_path = os.path.join(app.config['UPLOAD_PATH'], "processed-" + filename)
+            input_path = os.path.join(usr_upload_directory, filename)
+            output_path = os.path.join(usr_upload_directory, "processed-" + filename)
 
             remove_background(input_path, output_path)
         
