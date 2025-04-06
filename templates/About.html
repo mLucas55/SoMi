@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About</title>
+    <link rel="stylesheet" href="/static/global.css">
+    <link rel="stylesheet" href="/static/about.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="navbar__container">
+            <h1 id="navbar__logo">About</h1>
+            <div class="hamburger" id="hamburger-menu">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+        <div class="sidebar" id="sidebar">
+            <button class="close-btn" id="close-menu">&times;</button>
+            <ul>
+                <li><a href="">Home</a></li> <!--TO DO-->
+                <li><a href="{{ url_for('saved')}}">Saved</a></li>
+                <li><a href="{{ url_for('about')}}">About</a></li>
+                <li><a href="">Sign in / Sign up</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- About Section -->
+    <section class="about-container">
+        <h1></h1>
+        <p>
+            <strong>How to use our application:</strong> <br><br>
+            The main screen is your canvas, where you can upload and experiment with different outfits.<br><br>
+            The dropdown menu on the right allows you to navigate to different sections, including signing up or accessing the saved outfits page. 
+            Once you have an account, you can save your outfits for future reference.<br><br>
+        </p>
+    </section>
+    <script src="{{ url_for('static', filename='global.js') }}"></script>
+</body>
+</html>
