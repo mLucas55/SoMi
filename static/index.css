@@ -26,10 +26,10 @@ p {
 	margin-bottom: 20px;
 }
 
-button {
+.index-container button {
 	padding: 12px 24px;
 	background-image: linear-gradient(to right, #3bf8d2, #4c6bf4);
-	color: rgb(8, 8, 8);
+	color: rgb(255, 255, 255);
 	border: none;
 	border-radius: 8px;
 	font-size: 1.1rem;
