@@ -6,12 +6,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const deleteBox = document.getElementById("delete-box");
   let idCounter = 0;
 
-  function getFilenameFromUrl(url) {
-    const parts = url.split('/');
-    return decodeURIComponent(parts[parts.length - 1].split('?')[0]);
-  }
-  
-
   // --- State Management ---
   const savedTags = JSON.parse(localStorage.getItem("imageTags")) || {};
 
@@ -195,42 +189,15 @@ document.addEventListener("DOMContentLoaded", () => {
       const contRect = cont.getBoundingClientRect();
       const delRect = deleteBox.getBoundingClientRect();
       
-      if (
-        contRect.left < delRect.right &&
-        contRect.right > delRect.left &&
-        contRect.top < delRect.bottom &&
-        contRect.bottom > delRect.top
-      ) {
-        const img = cont.querySelector('img');
-        const filename = getFilenameFromUrl(img.src);
-    
-        // Remove from DOM
+      if (contRect.left < delRect.right && 
+          contRect.right > delRect.left &&
+          contRect.top < delRect.bottom && 
+          contRect.bottom > delRect.top) {
         cont.remove();
-    
-        // Remove from localStorage
         delete savedTags[cont.dataset.id];
         localStorage.setItem('imageTags', JSON.stringify(savedTags));
-    
-        // Send delete request to server
-        fetch('/delete-image', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({ filename })
-        })
-        .then(res => res.json())
-        .then(data => {
-          if (data.status !== 'success') {
-            console.error('Failed to delete image on server:', data.message);
-          }
-        })
-        .catch(err => {
-          console.error('Error deleting image:', err);
-        });
       }
     }
-    
   }
 
   // --- Tagging System ---
