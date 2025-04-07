@@ -45,7 +45,7 @@
 
 /* Flash Message Styling */
 .flash-messages {
-	margin: 20px auto;
+	margin: 80px auto 20px auto;
 	max-width: 400px;
 	list-style: none;
 	padding: 0;
