@@ -32,9 +32,7 @@
 		                Logout
 		              </button>
 	                </form>
-	              </li>
-                {% else %} 
-                <li><a href="{{ url_for('register') }}">Sign in / Sign up</a></li>	  
+	              </li> 
                 {% endif %}
                 {% if current_user.is_authenticated %}
                 <li><a href="{{ url_for('saved')}}">Saved</a></li>

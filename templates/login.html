@@ -32,9 +32,6 @@
 		                Logout
 		              </button>
 	                </form>
-	              </li>
-                {% else %} 
-                <li><a href="{{ url_for('register') }}">Sign in / Sign up</a></li>	  
                 {% endif %}
                 {% if current_user.is_authenticated %}
                 <li><a href="{{ url_for('saved')}}">Saved</a></li>
@@ -64,6 +61,7 @@
 			<input type="password" id="password" name="password" required>
 			<br>
 			<button type="submit">Login</button>
+			<button onclick="window.location.href='/login'">Go to Registration Page</button>
 		</form>
 	</div>
 	
