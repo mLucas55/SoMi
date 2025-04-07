@@ -1,0 +1,62 @@
+
+/* Login Form */
+.login-container {
+	max-width: 400px;
+	margin: 100px auto;
+	background: white;
+	padding: 30px;
+	border-radius: 15px;
+	box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+.login-container form {
+	display: flex;
+	flex-direction: column;
+}
+
+.login-container label {
+	margin-top: 15px;
+	margin-bottom: 5px;
+	font-size: 1.1rem;
+}
+
+.login-container input {
+	padding: 10px;
+	border: 1px solid #ccc;
+	border-radius: 8px;
+	font-size: 1rem;
+}
+
+.login-container button {
+	margin-top: 20px;
+	padding: 12px;
+	background-image: linear-gradient(to right, #3bf8d2, #4c6bf4);
+	color: white;
+	border: none;
+	border-radius: 8px;
+	font-size: 1.1rem;
+	cursor: pointer;
+	transition: 0.3s ease;
+}
+
+.login-container button:hover {
+	opacity: 0.85;
+}
+
+/* Flash Message Styling */
+.flash-messages {
+	margin: 20px auto;
+	max-width: 400px;
+	list-style: none;
+	padding: 0;
+}
+
+.flash-messages .alert {
+	background: #e1f5fe;
+	color: #0277bd;
+	padding: 10px 15px;
+	border-radius: 5px;
+	margin-bottom: 10px;
+	font-size: 0.95rem;
+	text-align: center;
+}
