@@ -36,11 +36,11 @@
                 {% else %} 
                 <li><a href="{{ url_for('register') }}">Sign in / Sign up</a></li>	  
                 {% endif %}
+                {% if current_user.is_authenticated %}
                 <li><a href="{{ url_for('saved')}}">Saved</a></li>
+                {% endif %}
                 <li><a href="{{ url_for('about')}}">About</a></li>
-                <li><a href="">Sign in / Sign up</a></li>
             </ul>
-		</div>
 	</nav>
 
 	{% if current_user.is_authenticated %}
