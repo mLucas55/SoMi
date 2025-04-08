@@ -130,10 +130,6 @@ input::file-selector-button {
   margin: 5px 0;
 }
 
-.image-form input {
-  margin-left: 5px;
-}
-
 .image-form .save-tags-btn {
   margin-top: 10px;
   cursor: pointer;
@@ -186,4 +182,3 @@ input::file-selector-button {
   object-fit: contain;
   pointer-events: none;
 }
-
