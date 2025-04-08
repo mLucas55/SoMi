@@ -272,7 +272,7 @@ def upload_files():
         # ------------- Remmove pre-processed image -------------
         remove_image(input_path, output_path)
 
-    return redirect(url_for('index'))
+    return redirect(url_for('home'))
 
 # New route to serve uploaded images
 @app.route('/uploads/<user_id>/<filename>')
