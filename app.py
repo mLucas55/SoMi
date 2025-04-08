@@ -103,7 +103,7 @@ def authenticate(username, login_password):
 
 @app.route('/', methods=['GET'])
 def index():
-    return render_template('index.html')
+    return render_template('login.html')
 
 #####################################################################
 #                        user homepage/canvas                       #
