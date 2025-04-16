@@ -1,26 +1,11 @@
 # SoMi
 
-Software Engineering Project 2025
+- Using SoMi: Upon going to somiclothing.com you will be prompted to login, however you can also navigate to the account regristration page. After either making an account or logging in to an exisiting account you are now ready to use SoMi
 
-Launch the website by typing "flask run" in the terminal and clicking the local host link.
+- In the bottom right corner of SoMi's homepage is the upload zone. You can either click that to upload an image, or drag and drop an image from another website. Keep in mind that the page must be refreshed to display uploaded images. Sometimes if it's a large image it may take the API a moment to fully remove the background.
 
-# Dependicies:
+- Acceptable image formats are: .jpg .png .avif .heic
 
-Once SoMi is succesfully cloned to your local device select the python intepereter in VSCode and select .venv as the virtual enviroment.
+- Uploaded images/outfits are automatically saved to your account so don't worry about loosing your uploads.
 
-Peform the following package installations in a new terminal while in the project directory:
-
-- pip install Flask
-
-- pip install werkzeug.utils
-
-# FRONT END:
-
-style.css is in /static. Per Flask requirements it must stay in that folder. I have some basic styling in there while
-I was working on it, but it doesn't need to stay that way. It is already linked to index.html
-
-script.js in in /static. Per FLask requirements it must stay in that folder. It is currently linked to index.html.
-
-# API Key Background Removal
-
-sandbox_d7545eb6450225858b6b018ec5d93a756e580ee1
+- By right clicking an image you can tag it with details such as a price or link to purchase. You can resize the image using the blue grab handle in the bottom right, and of course you can move the images anywhere around the campus.
